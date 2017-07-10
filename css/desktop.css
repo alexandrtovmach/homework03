@@ -1,0 +1,284 @@
+/*global*/
+body, header, figure, figcaption, aside, article, nav, footer, h1, h3, p {
+    display: block;
+    margin: 0;
+    padding: 0;
+}
+ul, input {
+    margin: 0;
+    padding: 0;
+}
+ul {
+    list-style-type: none;
+}
+body {
+    display: flex;
+    flex-direction: column;
+    min-width: 304px;
+    overflow-x: hidden;
+    background-image: url("../img/bg_desktop.jpg");
+    background-size: cover;
+    background-color: rgb(8,96,114);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    font-family: 'Ubuntu', lucida console, sans-serif;
+    animation-name: hidebody;
+    animation-timing-function: linear;
+    animation-duration: 2s;
+}
+@keyframes hidebody {
+    from {
+        background-position: 150vh 0;
+    }
+    to {
+        background-position: 0 0;
+    }
+}
+#wallarper {
+    position: fixed;
+    z-index: 10;
+	top: -100%;
+	bottom: -100%;
+    right: 150%;
+    width: 170%;
+    transform: rotate(24deg);
+    background: rgb(8,96,114);
+    animation-name: openAnim;
+    animation-duration: 3.5s;
+    animation-timing-function: linear;
+    opacity: 0;
+}
+@keyframes openAnim {
+    0% {
+        right: -50%;
+        opacity: 1;
+    }
+    70% {
+        right: calc(100% + 0.5vw);
+        opacity: 1;
+    }
+    100% {
+        right: calc(100% + 1vw)%;
+        opacity: 0;
+    }
+}
+a {
+    text-decoration: none;
+    color: white;
+}
+p {
+    text-indent: 15px;
+    text-align: center;
+    font-weight: 600;
+}
+.centerContent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.button {
+    padding: 15px;
+    margin: 5px;
+    background-color: rgb(8,96,114);
+    min-height: 10px;
+    min-width: 70px;
+    cursor: pointer;
+    color: white;
+    font-weight: 600;
+	transition: 0.5s;
+}
+.button:hover {
+    background-color: rgb(57,227,248);
+}
+.button:first-child {
+    margin-left: 0;
+}
+.button:last-child {
+    margin-right: 0;
+}
+
+.hidden {
+    display: none;
+}
+#arrow {
+    position: fixed;
+    bottom: 50px;
+    right: 50px;
+    text-align: center;
+    width: 50px;
+    height: 50px;
+    color: white;
+    border-radius: 50%;
+    font-size: 40px;
+    background-color: rgb(57,227,248);
+    opacity: 0.5;
+    transition: 0.5s;
+    cursor: pointer;
+    z-index: 100;
+}
+#arrow:hover {
+    opacity: 1;
+}
+/*header*/
+header {
+    position: fixed;
+    width: calc(100% - 2*10px);
+    display: flex;
+    justify-content: space-around;
+    padding: 10px;
+    background: linear-gradient(114deg, rgba(8,96,114,0.8) 200px, transparent 205px);
+}
+/*----logo*/
+.h_logo {
+    flex: 0 0 auto;
+    width: 100px;
+    height: 100px;
+}
+.h_logo img {
+    width: 100%;
+    height: 100%;
+}
+/*----panel*/
+.h_panel {
+    flex: auto;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-direction: column;
+}
+/*------search*/
+.h_search {
+    display: flex;
+    flex-wrap: nowrap;
+}
+.h_search input {
+    width: 150px;
+    height: 20px;
+    text-indent: 5px;
+    border-top: 2px solid rgb(8,96,114);
+    border-bottom: 2px solid rgb(8,96,114);
+    border-left: 2px solid rgb(8,96,114);
+    border-right: 0;
+    border-radius: 5px 0 0 5px;
+}
+.h_search img {
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgb(8,96,114);
+    border-left-width: 1px;
+    border-radius: 0 5px 5px 0;
+    vertical-align: middle;
+    background-color: rgb(8,96,114);
+    cursor: pointer;
+	transition: 0.5s;
+}
+.h_search img:hover {
+    background-color: rgb(57,227,248);
+}
+/*------menu*/
+.h_menu {
+    display: flex;
+}
+.h_menu_block {
+    flex: 0 1 100px;
+}
+/*------panelBar hidden for all exept small devices*/
+.h_panelBar {
+	display: none;
+}
+/*content*/
+.content {
+    display: flex;
+    margin-top: 120px;
+    animation-name: hideCont;
+}
+/*----aside*/
+.c_aside {
+    flex: 1 0 auto;
+    font-weight: 700;
+    color: white;
+    min-width: 150px;
+}
+/*------menu*/
+.c_as_menu {
+    position: fixed;
+    height: 100vh;
+    background: linear-gradient(114deg, rgba(8,96,114,0.8) 150px, transparent 155px);
+    padding: 10px;
+    min-width: 150px;
+}
+.c_as_menu ul li{
+    height: 25px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    text-indent: 15px;
+	transition: 0.5s;
+}
+.c_as_menu ul li:hover {
+    background-color: rgba(57,227,248,0.9);
+}
+/*----article*/
+.c_article {
+    flex: 6 0 auto;
+}
+/*------page main info*/
+.c_ar_content {
+    height: calc(100vh - 100px - 2*10px);
+    display: flex;
+    flex-direction: column;
+	font-size: 20px;
+    cursor: default;
+}
+.c_ar_content:nth-child(2n) {
+    background: rgba(17,197,238,0.9);
+}
+.c_ar_content:nth-child(2n-1) {
+    background: rgba(37,227,248,0.9);
+}
+
+/*--------post*/
+.c_ar_content_postDiv {
+	width: 90%;
+	height: 90%;
+	background-color: red;
+	position: relative;
+}
+.c_ar_content_postDiv > h2 {
+	position: absolute;
+	top: 1%;
+	width: 100%;
+	text-align: center;
+}
+.c_ar_content_postDiv > p {
+	position: absolute;
+	top: 15%;
+	left: 5%;
+	width: calc(100% - 150px - 15%);
+	text-align: justify;
+}
+.c_ar_content_postDiv > img {	
+	position: absolute;
+	top: 15%;
+	right: 5%;
+	width: 150px;
+}
+.c_ar_content_postDiv > span {
+	position: absolute;
+	bottom: 5%;
+	left: 5%;
+}
+.c_ar_content_postDiv > div {
+	position: absolute;
+	bottom: 5%;
+	right: 5%;
+}
+/*footer*/
+footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    width: calc(100% - 2*10px);
+    padding: 10px;
+    background: linear-gradient(to right, transparent 40%, rgba(57,227,248,0.7) 70%);
+}

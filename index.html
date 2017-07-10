@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tovmach Alexandr homework#2</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+	<link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+    <link rel="stylesheet" media="screen and (min-width: 1921px)" href="css/high.css">
+    <link rel="stylesheet" media="screen and (min-width: 769px) and (max-width: 1920px)" href="css/desktop.css">
+    <link rel="stylesheet" media="screen and (max-width: 768px) and (min-width: 480px)" href="css/pocket.css">
+    <link rel="stylesheet" media="screen and (max-width: 480px)" href="css/small.css">
+    <script src="js/general.js"></script>
+    <script src="js/scroll.js"></script>
+</head>
+<body onload="init(); arrows(); loadContent(); contCreate();">
+<div id="wallarper"></div>
+<header>
+    <div class="h_logo"><a href=""><img src="img/logo.png"></a></div>
+    <div class="h_panel">
+        <div class="h_search"><input type="text" placeholder="Search"><img src="img/search_icon.png"></div>
+        <nav class="h_menu">
+            <div class="h_menu_block button centerContent">HOME</div>
+            <div class="h_menu_block button centerContent">NEWS</div>
+            <div class="h_menu_block button centerContent">PORTFOLIO</div>
+            <div class="h_menu_block button centerContent">CONTACTS</div>
+        </nav>
+    </div>
+	<div class="h_panelBar centerContent" onclick="smallMenuShow()">|||</div>
+</header>
+<div class="content">
+    <aside class="c_aside">
+        <nav class="c_as_menu">
+            <ul></ul>
+        </nav>
+    </aside>
+    <article class="c_article">
+        <div class="c_ar_content centerContent">
+			<div class="c_ar_content_postDiv">
+				<img src="http://via.placeholder.com/150x150">
+				<h2>Quibusdam incidunt accusantium cumque.</h2>
+				<p>Eum consequuntur odio. Similique amet ipsa quia. Et culpa in atque rerum non illum. Aut fugit et praesentium quaerat ea est quasi.</p>
+				<span>1031-10-28T18:43:11.413Z</span>
+				<div>
+					<span>Food</span>
+					<span>Business</span>
+					<span>Sport</span>
+				</div>
+			</div>
+        </div>
+    </article>
+</div>
+<div id="arrow" class="hidden" onclick="scrollToTop()">&#9650;</div>
+<footer>
+    <p>All rights reserved. Author: Alexandr Tovmach</p>
+</footer>
+</body>
+</html>
