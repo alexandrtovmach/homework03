@@ -35,23 +35,47 @@ function smallMenuShow() {
 
 function loadContent() {
 	var xhr = new XMLHttpRequest();
-	xhr.open('GET', 'https://api.myjson.com/bins/152f9j', false);
+	xhr.open('GET', 'https://api.myjson.com/bins/152f9j');
 	xhr.send();
-		if (xhr.status != 200) {
-		alert( xhr.status + ': ' + xhr.statusText );
-	} else {
-		
-	}
-	
-	function createPost(header, paragraph, img, date, tags) {
+	xhr.onload = function () {
+        if (xhr.status == 200) {
+            var a = JSON.parse(xhr.responseText).data[0];
+            var b = new Post(a.title, a.description, a.image, a.createdAt, a.tags);
+            document.getElementsByClassName('c_article')[0].appendChild(b);
+            var a = JSON.parse(xhr.responseText).data[1];
+            var b = new Post(a.title, a.description, a.image, a.createdAt, a.tags);
+            document.getElementsByClassName('c_article')[0].appendChild(b);
+            var a = JSON.parse(xhr.responseText).data[2];
+            var b = new Post(a.title, a.description, a.image, a.createdAt, a.tags);
+            document.getElementsByClassName('c_article')[0].appendChild(b);
+            contCreate();
+        }
+    }
+	function Post(header, paragraph, img, date, tags) {
 		var postDiv = document.createElement('div'),
 			h2 = document.createElement('h2'),
 			p =  document.createElement('p'),
-			img =  document.createElement('img'),
+			pict =  document.createElement('img'),
 			spanDate =  document.createElement('span'),
 			divTag =  document.createElement('div');
-			
-		postDiv.className = "c_ar_content_postDiv";
-		
+		h2.innerHTML = header;
+        p.innerHTML = paragraph;
+        pict.src = img;
+        pict.alt = header.substr(0, 5);
+        spanDate.innerHTML = (new Date(Date.parse(date))).toLocaleString('ru').split(', ').join('<br>');
+        if (tags) {
+            for (var i = 0; i < tags.length; i++) {
+            	var spanTag =  document.createElement('span');
+                spanTag.innerHTML = tags[i];
+                divTag.appendChild(spanTag);
+            }
+        }
+        postDiv.appendChild(h2);
+        postDiv.appendChild(pict);
+        postDiv.appendChild(p);
+        postDiv.appendChild(divTag);
+        postDiv.appendChild(spanDate);
+		postDiv.className = "c_ar_content";
+		return postDiv
 	}
 }

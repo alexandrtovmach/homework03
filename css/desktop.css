@@ -15,7 +15,7 @@ body {
     display: flex;
     flex-direction: column;
     min-width: 304px;
-    overflow-x: hidden;
+    /*overflow-x: hidden;*/
     background-image: url("../img/bg_desktop.jpg");
     background-size: cover;
     background-color: rgb(8,96,114);
@@ -58,7 +58,7 @@ body {
         opacity: 1;
     }
     100% {
-        right: calc(100% + 1vw)%;
+        right: calc(100% + 1vw);
         opacity: 0;
     }
 }
@@ -190,11 +190,10 @@ header {
 .content {
     display: flex;
     margin-top: 120px;
-    animation-name: hideCont;
 }
 /*----aside*/
 .c_aside {
-    flex: 1 0 auto;
+    flex: 1 0 150px;
     font-weight: 700;
     color: white;
     min-width: 150px;
@@ -205,12 +204,13 @@ header {
     height: 100vh;
     background: linear-gradient(114deg, rgba(8,96,114,0.8) 150px, transparent 155px);
     padding: 10px;
-    min-width: 150px;
 }
 .c_as_menu ul li{
-    height: 25px;
+    width: 150px;
+    min-height: 25px;
     display: flex;
     align-items: center;
+    word-break: break-all;
     cursor: pointer;
     text-indent: 15px;
 	transition: 0.5s;
@@ -220,59 +220,51 @@ header {
 }
 /*----article*/
 .c_article {
-    flex: 6 0 auto;
+    flex: 1 0 auto;
+    width: calc(100vw - 150px - 2*100px)
 }
-/*------page main info*/
 .c_ar_content {
-    height: calc(100vh - 100px - 2*10px);
-    display: flex;
+    min-height: calc(100vh - 100px - 2*10px - 2*10px);/*100vh - header-hight - 2*header-padding - 2*post-padding*/
+    padding: 10px 100px;
     flex-direction: column;
+    justify-content: center;
+    display: flex;
 	font-size: 20px;
     cursor: default;
 }
+/*--------post*/
 .c_ar_content:nth-child(2n) {
     background: rgba(17,197,238,0.9);
 }
 .c_ar_content:nth-child(2n-1) {
     background: rgba(37,227,248,0.9);
 }
-
-/*--------post*/
-.c_ar_content_postDiv {
-	width: 90%;
-	height: 90%;
-	background-color: red;
-	position: relative;
-}
-.c_ar_content_postDiv > h2 {
-	position: absolute;
-	top: 1%;
-	width: 100%;
+.c_ar_content > h2 {
 	text-align: center;
 }
-.c_ar_content_postDiv > p {
-	position: absolute;
-	top: 15%;
-	left: 5%;
-	width: calc(100% - 150px - 15%);
+.c_ar_content > img {
+    align-self: center;
+    width: 150px;
+    margin: 0 0 20px 0;
+}
+.c_ar_content > p {
+    text-indent: 30px;
+    line-height: 40px;
+    flex: 0 0 auto;
 	text-align: justify;
 }
-.c_ar_content_postDiv > img {	
-	position: absolute;
-	top: 15%;
-	right: 5%;
-	width: 150px;
+.c_ar_content > span {
+    align-self: flex-end;
 }
-.c_ar_content_postDiv > span {
-	position: absolute;
-	bottom: 5%;
-	left: 5%;
+.c_ar_content > div > span {
+    padding: 2px;
+    border: 2px solid yellow;
+    background-color: red;
 }
-.c_ar_content_postDiv > div {
-	position: absolute;
-	bottom: 5%;
-	right: 5%;
-}
+.c_ar_content > div {
+     align-self: flex-start;
+     margin: 20px 0;
+ }
 /*footer*/
 footer {
     display: flex;
