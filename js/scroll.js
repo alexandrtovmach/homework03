@@ -10,7 +10,7 @@ function arrows() {
 function scrollToTop() {
 	var inter = setInterval(function () {
 		var a = -20;
-		a = (window.pageYOffset <= 100)? ((window.pageYOffset <= 50)? a/10: a/1): a/0.5;
+		a = (window.pageYOffset <= 100)? ((window.pageYOffset <= 50)? a/10: a/1): a*(window.pageYOffset / 200);
 		window.scrollBy(0, a.toFixed(1));
 		if (window.pageYOffset == 0) {clearInterval(inter)};
 	}, 1000/60);
@@ -37,10 +37,10 @@ function scrollToElem(targ) {
     var elem = document.getElementById(targ.target.getAttribute('charpenter')).parentElement;
     var b = (elem.getBoundingClientRect().top < 0)? -1: 1;
     var inter = setInterval(function () {
-        var a = 50;
+        var a = 20;
         var dist = elem.getBoundingClientRect().top*b;
-        a = (dist <= 120*b)? ((dist <= 50*b)? a/20: a/10): a/2;
+        a = (dist <= 120*b)? ((dist <= 50*b)? a/20: a/10): a*(Math.abs(dist) / 200);
         window.scrollBy(0, a.toFixed(1)*b);
-        if (elem.getBoundingClientRect().top*b <= 120*b) {clearInterval(inter)};
+        if (elem.getBoundingClientRect().top <= 120) {clearInterval(inter)};
     }, 1000/60);
 }

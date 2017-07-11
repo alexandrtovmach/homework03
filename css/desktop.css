@@ -119,6 +119,34 @@ p {
 #arrow:hover {
     opacity: 1;
 }
+.selectTag {	
+    position: fixed;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+    top: 20%;
+    right: 20%;
+    bottom: 20%;
+    left: 20%;
+	width: auto;
+	height: auto;
+	overflow-y: scroll;
+	min-width: 200px;
+    background-color: white;
+}
+.selectTag label {
+	width: 10%;
+	word-break: break-all;
+}
+.selectTag label > input {
+	margin: 0 10px;
+}
+.selectTag > input {
+    font-size: 20px;
+	width: 10%;
+	height: 10%;
+}
 /*header*/
 header {
     position: fixed;
@@ -201,9 +229,10 @@ header {
 /*------menu*/
 .c_as_menu {
     position: fixed;
-    height: 100vh;
+    min-height: 100vh;
     background: linear-gradient(114deg, rgba(8,96,114,0.8) 150px, transparent 155px);
     padding: 10px;
+	overflow-y: auto;
 }
 .c_as_menu ul li{
     width: 150px;
@@ -255,6 +284,7 @@ header {
 }
 .c_ar_content > span {
     align-self: flex-end;
+	text-align: right;
 }
 .c_ar_content > div > span {
     padding: 2px;
