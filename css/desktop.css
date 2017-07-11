@@ -136,7 +136,8 @@ p {
     background-color: white;
 }
 .selectTag label {
-	width: 10%;
+    padding: 5px;
+	width: 100px;
 	word-break: break-all;
 }
 .selectTag label > input {
@@ -144,7 +145,8 @@ p {
 }
 .selectTag > input {
     font-size: 20px;
-	width: 10%;
+    text-align: center;
+    padding: 5px;
 	height: 10%;
 }
 /*header*/
@@ -229,19 +231,23 @@ header {
 /*------menu*/
 .c_as_menu {
     position: fixed;
-    min-height: 100vh;
+    height: calc(100vh - 120px - 20px);
     background: linear-gradient(114deg, rgba(8,96,114,0.8) 150px, transparent 155px);
     padding: 10px;
-	overflow-y: auto;
+	overflow-y: scroll;
+    -ms-overflow-style: none;
+    overflow: -moz-scrollbars-none;
+}
+.c_as_menu::-webkit-scrollbar {
+    width: 0;
 }
 .c_as_menu ul li{
-    width: 150px;
+    width: 20vw;
     min-height: 25px;
     display: flex;
     align-items: center;
     word-break: break-all;
     cursor: pointer;
-    text-indent: 15px;
 	transition: 0.5s;
 }
 .c_as_menu ul li:hover {
@@ -250,7 +256,7 @@ header {
 /*----article*/
 .c_article {
     flex: 1 0 auto;
-    width: calc(100vw - 150px - 2*100px)
+    width: calc(80vw - 100px*2);
 }
 .c_ar_content {
     min-height: calc(100vh - 100px - 2*10px - 2*10px);/*100vh - header-hight - 2*header-padding - 2*post-padding*/
@@ -290,6 +296,7 @@ header {
     padding: 2px;
     border: 2px solid yellow;
     background-color: red;
+    margin: 0 5px;
 }
 .c_ar_content > div {
      align-self: flex-start;

@@ -61,13 +61,15 @@ function loadContent() {
 	}
 	//select Post for showing
 	function showPost() {
-		var arrLikesTags = []
+		var arrLikesTags = [],
+			likedPosts = [],
+			countPosts = 0;
 		if (!(checkLocalStorage())) {
 			selectTags(json);
 		} else {
+            document.forms.selectTag.className = 'hidden';
 			arrLikesTags = checkLocalStorage();
 			//set only liked post to likedPosts from json
-			var likedPosts = [];
 			strt: for (var key in json) {
 				for (var i = 0; i < json[key].tags.length; i++) {
 					for (var e = 0; e < arrLikesTags.length; e++) {
@@ -81,18 +83,32 @@ function loadContent() {
 			likedPosts.sort(sortToDate)
 			//sort function
 			function sortToDate(a, b) {
-				if (Date.parse(a.createdAt) < Date.parse(b.createdAt)) {
-					return 1;} 
-				if (Date.parse(a.createdAt) > Date.parse(a.createdAt)) {
-					return -1}
-			}
-			//show in DOM all sorted liked post
-			for (var r = 0; r < likedPosts.length; r++) {
-				var b = new Post(likedPosts[r]);
-				document.getElementsByClassName('c_article')[0].appendChild(b);
-			}
-			//create side nav menu
-			contCreate()
+                if (Date.parse(a.createdAt) < Date.parse(b.createdAt)) {
+                    return 1;
+                }
+                if (Date.parse(a.createdAt) > Date.parse(a.createdAt)) {
+                    return -1
+                }
+            }
+            //function add post to page
+            function createPostInDOM(array) {
+                //show in DOM all sorted liked post
+                var cach = countPosts;
+                for (countPosts; (countPosts <= (cach + 10)&&(countPosts < array.length)); countPosts++) {
+                    var b = new Post(array[countPosts]);
+                    document.getElementsByClassName('c_article')[0].appendChild(b);
+                }
+                //create side nav menu
+                contCreate()
+            }
+            createPostInDOM(likedPosts);
+			//add event listener for infinity scroll
+            document.addEventListener('scroll', function () {
+            	var heightPage = (document.documentElement)? document.documentElement: document.body;
+                if(window.pageYOffset > (heightPage.scrollHeight - heightPage.clientHeight - 100)) {
+                    createPostInDOM(likedPosts);
+                }
+            })
 		}
 		
 		//show form to select likes tags
@@ -111,7 +127,7 @@ function loadContent() {
 				formSelect.className = 'hidden';
 				localStorage.setItem('tagsOfPost', arrLikesTags);
 				showPost();
-			}
+			};
 			//push all tags to uniqeTags
 			var uniqeTags = [];
 			for (var key in json) {
@@ -174,6 +190,7 @@ function loadContent() {
 		return postDiv
 	}
 }
+
 
 
 
