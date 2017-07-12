@@ -10,6 +10,14 @@ function init() {
 		document.getElementsByClassName('h_panel')[0].style.display = 'none';
 		phaseSmallMenu = 0;
 	});
+	document.getElementsByClassName('h_search')[0].getElementsByTagName('input')[0].addEventListener('keyup', function(event) {search(event)});		
+	//add event listener for infinity scroll
+    document.onscroll = function () {
+    	var heightPage = (document.documentElement)? document.documentElement: document.body;
+        if(window.pageYOffset > (heightPage.scrollHeight - heightPage.clientHeight - 100)) {
+            createPostInDOM(allPost);
+        }
+    }
 }
 
 var phaseSideBar = 0;
@@ -34,9 +42,11 @@ function smallMenuShow() {
 }
 
 
+//dislikedPosts need in global for "onclick" function of delete Post 
+var dislikedPosts = (localStorage.getItem('dislikedPosts'))? localStorage.getItem('dislikedPosts').split(','): [];
+var allPost = [];
 
-
-
+//general function of load/parse/sort/show/delete data
 function loadContent() {
 	var json;
 	var xhr = new XMLHttpRequest();
@@ -45,7 +55,7 @@ function loadContent() {
 	xhr.onload = function () {
         if (xhr.status == 200) {
             json = JSON.parse(xhr.responseText).data;
-			showPost()
+			showPost();
         } else {
 			alert('Sorry, but server not response\n' + xhr.status + ' : ' + xhr.statusText)
 		}
@@ -59,11 +69,12 @@ function loadContent() {
 			return localStorage.getItem('tagsOfPost').split(',');
 		}
 	}
+	
 	//select Post for showing
 	function showPost() {
 		var arrLikesTags = [],
 			likedPosts = [],
-			countPosts = 0;
+			notLikedPosts = [];
 		if (!(checkLocalStorage())) {
 			selectTags(json);
 		} else {
@@ -74,13 +85,35 @@ function loadContent() {
 				for (var i = 0; i < json[key].tags.length; i++) {
 					for (var e = 0; e < arrLikesTags.length; e++) {
 						if (arrLikesTags[e] == json[key].tags[i]) {
-							likedPosts.push(json[key]);
-							continue strt;
+							if (checkToDislike(json[key])) {
+								likedPosts.push(json[key]);
+								continue strt;
+							}
+						} else {
+							if (checkToDislike(json[key])) {
+								notLikedPosts.push(json[key]);
+								continue strt;
+							}
 						}
 					}
 				}
 			}
-			likedPosts.sort(sortToDate)
+			function checkToDislike(obj) {
+				var res = true;
+				for (var y = 0; y < dislikedPosts.length; y++) {
+					if (+Date.parse(obj.createdAt) == +dislikedPosts[y]) {
+						res = false;
+					}
+				}
+				return res;
+			}
+			
+			likedPosts.sort(sortToDate);
+			notLikedPosts.sort(sortToDate);
+			
+			//combine post arrays to one allPost
+			allPost = likedPosts.concat(notLikedPosts)
+			
 			//sort function
 			function sortToDate(a, b) {
                 if (Date.parse(a.createdAt) < Date.parse(b.createdAt)) {
@@ -90,25 +123,8 @@ function loadContent() {
                     return -1
                 }
             }
-            //function add post to page
-            function createPostInDOM(array) {
-                //show in DOM all sorted liked post
-                var cach = countPosts;
-                for (countPosts; (countPosts <= (cach + 10)&&(countPosts < array.length)); countPosts++) {
-                    var b = new Post(array[countPosts]);
-                    document.getElementsByClassName('c_article')[0].appendChild(b);
-                }
-                //create side nav menu
-                contCreate()
-            }
-            createPostInDOM(likedPosts);
-			//add event listener for infinity scroll
-            document.addEventListener('scroll', function () {
-            	var heightPage = (document.documentElement)? document.documentElement: document.body;
-                if(window.pageYOffset > (heightPage.scrollHeight - heightPage.clientHeight - 100)) {
-                    createPostInDOM(likedPosts);
-                }
-            })
+            
+            createPostInDOM(allPost);
 		}
 		
 		//show form to select likes tags
@@ -119,12 +135,15 @@ function loadContent() {
 			formSelect.onsubmit = function (event) {
 				event.preventDefault();
 				var arrInput = formSelect.getElementsByTagName('input');
+				var cacheForEmptySelect = [];
 				for (var i = 0; i < arrInput.length; i++) {
 					if (arrInput[i].checked) {
 						arrLikesTags.push(arrInput[i].value)
 					}
+					cacheForEmptySelect.push(arrInput[i].value)
 				}
 				formSelect.className = 'hidden';
+				if (arrLikesTags.length == 0) {arrLikesTags = cacheForEmptySelect}
 				localStorage.setItem('tagsOfPost', arrLikesTags);
 				showPost();
 			};
@@ -161,38 +180,95 @@ function loadContent() {
 		}
 		return Object.keys(obj);
 	}
-	//constructor of Post
-	function Post(obj) {
-		var postDiv = document.createElement('div'),
-			h2 = document.createElement('h2'),
-			p =  document.createElement('p'),
-			pict =  document.createElement('img'),
-			spanDate =  document.createElement('span'),
-			divTag =  document.createElement('div');
-		h2.innerHTML = obj.title;
-        p.innerHTML = obj.description;
-        pict.src = obj.image;
-        pict.alt = obj.title.substr(0, 5);
-        spanDate.innerHTML = (new Date(Date.parse(obj.createdAt))).toLocaleString('ru').split(', ').join('<br>');
-        if (obj.tags) {
-            for (var i = 0; i < obj.tags.length; i++) {
-            	var spanTag =  document.createElement('span');
-                spanTag.innerHTML = obj.tags[i];
-                divTag.appendChild(spanTag);
-            }
-        }
-        postDiv.appendChild(h2);
-        postDiv.appendChild(pict);
-        postDiv.appendChild(p);
-        postDiv.appendChild(divTag);
-        postDiv.appendChild(spanDate);
-		postDiv.className = "c_ar_content";
-		return postDiv
-	}
+
 }
 
+//constructor of Post
+function Post(obj) {
+	var postDiv = document.createElement('div'),
+		h2 = document.createElement('h2'),
+		p =  document.createElement('p'),
+		pict =  document.createElement('img'),
+		spanDate =  document.createElement('span'),
+		divTag =  document.createElement('div');
+		closeDiv = document.createElement('div');
+	h2.innerHTML = obj.title;
+    p.innerHTML = obj.description;
+    pict.src = obj.image;
+    pict.alt = obj.title.substr(0, 5);
+    spanDate.innerHTML = (new Date(Date.parse(obj.createdAt))).toLocaleString('ru').split(', ').join('<br>');
+    if (obj.tags) {
+        for (var i = 0; i < obj.tags.length; i++) {
+        	var spanTag =  document.createElement('span');
+            spanTag.innerHTML = obj.tags[i];
+            divTag.appendChild(spanTag);
+        }
+    }
+	closeDiv.innerHTML = 'x';
+	closeDiv.className = 'close';
+	closeDiv.onclick = function(event) {
+		var papaEl = event.target.parentElement;
+		papaEl.style.animation = 'deletePost 1s';
+		//nu tak nado bilo))
+		function a() {papaEl.style.display = 'none'; contCreate();}
+		setTimeout(a, 1000)
+		dislikedPosts.push(Date.parse(obj.createdAt));
+		localStorage.setItem('dislikedPosts', dislikedPosts);
+	}
+	
+    postDiv.appendChild(closeDiv);
+    postDiv.appendChild(h2);
+    postDiv.appendChild(pict);
+    postDiv.appendChild(p);
+    postDiv.appendChild(divTag);
+    postDiv.appendChild(spanDate);
+	postDiv.className = "c_ar_content";
+	return postDiv
+}
 
+//function add post to page
+var countPosts = 0;
+function createPostInDOM(array, a) {
+    //show in DOM all sorted liked post
+    var cach = (a !== undefined)? a: countPosts;
+    for (countPosts; (countPosts < (cach + 10)&&(countPosts < array.length)); countPosts++) {
+        var b = new Post(array[countPosts]);
+        document.getElementsByClassName('c_article')[0].appendChild(b);
+    }
+	console.log(countPosts)
+    //create side nav menu
+    contCreate()
+}
 
+function search(event) {
+	var searchReq = document.getElementsByClassName('h_search')[0].getElementsByTagName('input')[0].value
+	if ((!searchReq)&&(event.keyCode != 8)&&(event.keyCode != 46)) {
+		alert('You nothing entry'); return;
+	} else {
+		var searchRes = [];
+		for (var i = 0; i < allPost.length; i++) {
+			if ((allPost[i].title.toLowerCase().indexOf(searchReq.toLowerCase(), 0)) > -1) {
+				searchRes.push(allPost[i])
+			}
+		}
+		//clean screen
+		document.getElementsByClassName('c_article')[0].innerHTML = null;
+		//add to screen result of searching
+		for (var i = 0; i < searchRes.length; i++) {
+            var b = new Post(searchRes[i]);
+            document.getElementsByClassName('c_article')[0].appendChild(b);
+		}
+		document.onscroll = function () {
+			var heightPage = (document.documentElement)? document.documentElement: document.body;
+			if(window.pageYOffset > (heightPage.scrollHeight - heightPage.clientHeight - 100)) {
+				createPostInDOM(searchRes, 10);
+			}
+		}
+		//create side nav menu
+        contCreate();
+	}
+	
+}
 
 
 

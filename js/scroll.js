@@ -19,12 +19,18 @@ function scrollToTop() {
 function contCreate() {
     var arrAllP = document.getElementsByTagName('article')[0].getElementsByTagName('h2');
     var names = [];
+	var u = 0;
     for (var i = 0; i < arrAllP.length; i++) {
-        names[i] = arrAllP[i].innerHTML;
-        arrAllP[i].setAttribute('id', ('p' + i))
+		if (!arrAllP[i].parentElement.offsetWidth) {
+			console.log(arrAllP[i].parentElement.offsetWidth);
+		} else {
+			names[u] = arrAllP[i].innerHTML;
+			arrAllP[i].setAttribute('id', ('p' + i));
+			u++;
+		}
     }
     var charp = document.getElementsByClassName('c_as_menu')[0].getElementsByTagName('ul')[0];
-    var li = document.createElement('li')
+	charp.innerHTML = null;
     for (var i = 0; i < names.length; i++) {
         var li = document.createElement('li');
         li.setAttribute('charpenter', ('p' + i));
