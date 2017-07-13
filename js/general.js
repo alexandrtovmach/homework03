@@ -47,7 +47,8 @@ var dislikedPosts = (localStorage.getItem('dislikedPosts'))? localStorage.getIte
 var allPost = [];
 
 //general function of load/parse/sort/show/delete data
-function loadContent() {
+function loadContent(nameFunc) {
+	if (nameFunc == 'showPost') {}
 	var json;
 	var xhr = new XMLHttpRequest();
 	xhr.open('GET', 'https://api.myjson.com/bins/152f9j');
@@ -98,6 +99,13 @@ function loadContent() {
 					}
 				}
 			}
+			
+			likedPosts.sort(sortToDate);
+			notLikedPosts.sort(sortToDate);
+			//combine post arrays to one allPost
+			allPost = likedPosts.concat(notLikedPosts);
+			createPostInDOM(allPost);
+			
 			function checkToDislike(obj) {
 				var res = true;
 				for (var y = 0; y < dislikedPosts.length; y++) {
@@ -108,12 +116,6 @@ function loadContent() {
 				return res;
 			}
 			
-			likedPosts.sort(sortToDate);
-			notLikedPosts.sort(sortToDate);
-			
-			//combine post arrays to one allPost
-			allPost = likedPosts.concat(notLikedPosts)
-			
 			//sort function
 			function sortToDate(a, b) {
                 if (Date.parse(a.createdAt) < Date.parse(b.createdAt)) {
@@ -123,30 +125,13 @@ function loadContent() {
                     return -1
                 }
             }
-            
-            createPostInDOM(allPost);
 		}
 		
 		//show form to select likes tags
 		function selectTags(json) {
 			var formSelect = document.forms.selectTag;
 			formSelect.className = 'selectTag';
-			//onsubmit form preventDefault and get checked tags to arrLikesTags and add to localStorage
-			formSelect.onsubmit = function (event) {
-				event.preventDefault();
-				var arrInput = formSelect.getElementsByTagName('input');
-				var cacheForEmptySelect = [];
-				for (var i = 0; i < arrInput.length; i++) {
-					if (arrInput[i].checked) {
-						arrLikesTags.push(arrInput[i].value)
-					}
-					cacheForEmptySelect.push(arrInput[i].value)
-				}
-				formSelect.className = 'hidden';
-				if (arrLikesTags.length == 0) {arrLikesTags = cacheForEmptySelect}
-				localStorage.setItem('tagsOfPost', arrLikesTags);
-				showPost();
-			};
+			
 			//push all tags to uniqeTags
 			var uniqeTags = [];
 			for (var key in json) {
@@ -167,6 +152,23 @@ function loadContent() {
 				formSelect.prepend(labelEl);
 			}
 			formSelect.classList.remove('hidden');
+			
+			//onsubmit form preventDefault and get checked tags to arrLikesTags and add to localStorage
+			formSelect.onsubmit = function (event) {
+				event.preventDefault();
+				var arrInput = formSelect.getElementsByTagName('input');
+				var cacheForEmptySelect = [];
+				for (var i = 0; i < arrInput.length; i++) {
+					if (arrInput[i].checked) {
+						arrLikesTags.push(arrInput[i].value)
+					}
+					cacheForEmptySelect.push(arrInput[i].value)
+				}
+				formSelect.className = 'hidden';
+				if (arrLikesTags.length == 0) {arrLikesTags = cacheForEmptySelect}
+				localStorage.setItem('tagsOfPost', arrLikesTags);
+				showPost();
+			};
 		}
 	}
 	
@@ -180,7 +182,6 @@ function loadContent() {
 		}
 		return Object.keys(obj);
 	}
-
 }
 
 //constructor of Post
@@ -229,13 +230,14 @@ function Post(obj) {
 //function add post to page
 var countPosts = 0;
 function createPostInDOM(array, a) {
+	
     //show in DOM all sorted liked post
     var cach = (a !== undefined)? a: countPosts;
     for (countPosts; (countPosts < (cach + 10)&&(countPosts < array.length)); countPosts++) {
         var b = new Post(array[countPosts]);
         document.getElementsByClassName('c_article')[0].appendChild(b);
     }
-	console.log(countPosts)
+	
     //create side nav menu
     contCreate()
 }
@@ -251,6 +253,7 @@ function search(event) {
 				searchRes.push(allPost[i])
 			}
 		}
+		
 		//clean screen
 		document.getElementsByClassName('c_article')[0].innerHTML = null;
 		//add to screen result of searching
@@ -264,6 +267,7 @@ function search(event) {
 				createPostInDOM(searchRes, 10);
 			}
 		}
+		
 		//create side nav menu
         contCreate();
 	}

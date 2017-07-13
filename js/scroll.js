@@ -21,9 +21,7 @@ function contCreate() {
     var names = [];
 	var u = 0;
     for (var i = 0; i < arrAllP.length; i++) {
-		if (!arrAllP[i].parentElement.offsetWidth) {
-			console.log(arrAllP[i].parentElement.offsetWidth);
-		} else {
+		if (arrAllP[i].parentElement.offsetWidth) {
 			names[u] = arrAllP[i].innerHTML;
 			arrAllP[i].setAttribute('id', ('p' + i));
 			u++;
